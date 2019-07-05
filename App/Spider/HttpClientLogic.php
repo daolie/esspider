@@ -27,7 +27,7 @@ class HttpClientLogic
         if ($cookie) {
             $httpClient->getClient()->setCookies($cookie);
         }
-        $response = $httpClient->getRequest([
+        $response = $httpClient->get([
             'referer'=>$url
         ]);
 //        if ($response->getStatusCode() == '302') {

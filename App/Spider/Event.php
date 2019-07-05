@@ -2,10 +2,11 @@
 
 namespace App\Spider;
 
-use App\Model\img\CosplayImgBean;
-use App\Model\img\CosplayImgModel;
-use App\Model\img\ImgBean;
-use App\Model\img\ImgModel;
+use App\Model\Img\CosplayImgBean;
+use App\Model\Img\CosplayImgModel;
+//use App\Model\Img\ImgBean;
+//use App\Model\Img\ImgModel;
+
 use EasySwoole\EasySwoole\Logger;
 use EasySwoole\MysqliPool\Connection;
 use EasySwoole\MysqliPool\Mysql;
@@ -44,16 +45,27 @@ class Event
                 Mysql::invoker('mysql', function (Connection $db) use ($img, $title) {
                     $urlInfo = parse_url($img);
                     $filePath = '/media/tioncico/2T硬盘资源文件/网站爬虫相关/cosplay/' . $urlInfo['host'] . $urlInfo['path'];
-                    $model = new CosplayImgModel($db);
+                    
+                    /*$model = new CosplayImgModel($db);
                     $bean = new CosplayImgBean();
                     $bean->setSourceUrl('http://moe.005.tv/');
                     $bean->setFilePath($urlInfo['host'] . $urlInfo['path']);
                     $bean->setImgName($title);
                     $bean->setImgTitle($title);
-                    $result = $model->add($bean);
-                    if ($result === false) {
+                    $result = $model->add($bean);*/
+                    
+                    $d = [
+                        'source_url' => 'http://moe.005.tv/',
+                        'file_path' => $urlInfo['host'] . $urlInfo['path'],
+                        'img_name' => $title,
+                        'img_title' => $title,
+                    ];
+                    
+                    file_put_contents(__DIR__.'/img.log', json_encode($d, JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
+                    
+                    /*if ($result === false) {
                         Logger::getInstance()->console('插入失败', Logger::LOG_LEVEL_WARNING);
-                    }
+                    }*/
 
                     RedisLogic::addConsume([
                         'type' => 2,//消费标识
